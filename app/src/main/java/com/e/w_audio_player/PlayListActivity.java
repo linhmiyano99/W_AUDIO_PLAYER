@@ -50,8 +50,7 @@ public class PlayListActivity extends ListActivity {
         lv.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // getting listitem index
                 int songIndex = position;
 

@@ -2,15 +2,12 @@ package com.e.w_audio_player;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -19,11 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,7 +95,6 @@ public class MainActivity extends AppCompatActivity
 
         // Load toàn bộ bài hát lên
         songsList = new ArrayList<HashMap<String, String>>();
-        songsList = songManager.getPlayList();
 
     }
 
@@ -136,6 +129,7 @@ public class MainActivity extends AppCompatActivity
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && arePermisionDenied()){
             requestPermissions(PERMISIONS, REQUEST_PERMISIONS);
         }
+        songsList = songManager.getPlayList();
         btnPlaylist.setOnClickListener(new View.OnClickListener() {
 
             @Override
