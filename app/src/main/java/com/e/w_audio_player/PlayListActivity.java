@@ -61,9 +61,8 @@ public class PlayListActivity extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // getting listitem index
-                sendNotification();
-                int songIndex = position;
-
+                 int songIndex = position;
+                sendNotification(songIndex);
                 // Starting new intent
                 Intent in = new Intent(getApplicationContext(),
                         MainActivity.class);
@@ -76,11 +75,11 @@ public class PlayListActivity extends ListActivity {
         });
     }
     @SuppressLint("NewApi")
-    public void sendNotification() {
+    public void sendNotification(int index) {
+
         Notification channel = new Notification.Builder(getApplicationContext(), CHANNEL_ID_1)
                 .setSmallIcon(R.drawable.ic_music)
-                .setContentTitle("Let me love you - DJ snake")
-                .setContentText("Song by justin beaber")
+                .setContentTitle(songsList.get(index).get("songTitle"))
                 .addAction(R.drawable.ic_skip_previous, "prev", null)
                 .addAction(R.drawable.ic_pause, "pause", null)
                 .addAction(R.drawable.ic_skip_next, "next", null)
