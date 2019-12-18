@@ -2,15 +2,12 @@ package com.e.w_audio_player;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -19,11 +16,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     // Media Player
     private  MediaPlayer mp;
     // Handler to update UI timer, progress bar etc,.
+    private NotificationManagerCompat notificationManagerCompat;
+
     private Handler mHandler = new Handler() {
         @Override
         public void publish(LogRecord logRecord) {
@@ -75,6 +73,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player);
+
+        notificationManagerCompat = NotificationManagerCompat.from(this);
 
 //        // All player buttons
         btnPlay = findViewById(R.id.btnPlay);
@@ -300,6 +300,8 @@ public class MainActivity extends AppCompatActivity
             currentSongIndex = data.getExtras().getInt("songIndex");
             // play selected song
             playSong(currentSongIndex);
+            sendNotification(currentSongIndex);
+
         }
 
     }
@@ -353,7 +355,20 @@ public class MainActivity extends AppCompatActivity
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+    @SuppressLint("NewApi")
+    public void sendNotification(int index) {
+        startService(index);
+    }
 
+    public void startService(int songIndex){
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        serviceIntent.putExtra("songIndex", String.valueOf(songIndex));
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+    public void stopService(){
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        stopService(serviceIntent);
+    }
 
 }
 

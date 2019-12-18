@@ -1,6 +1,5 @@
 package com.e.w_audio_player;
 
-import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,26 +10,20 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PlayListActivity extends ListActivity {
     // Songs list
     public ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
-    private NotificationManagerCompat notificationManagerCompat;
-    int songIndex;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playlist);
 
-        notificationManagerCompat = NotificationManagerCompat.from(this);
+
 
         ArrayList<HashMap<String, String>> songsListData = new ArrayList<HashMap<String, String>>();
-        songIndex = -1;
         SongsManager plm = new SongsManager();
         // get all songs from sdcard
         this.songsList = plm.getPlayList();
@@ -60,9 +53,7 @@ public class PlayListActivity extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // getting listitem index
-                songIndex = position;
-                if(songIndex >= 0)
-                sendNotification(songIndex);
+                int songIndex = position;
                 // Starting new intent
                 Intent in = new Intent(getApplicationContext(),  MainActivity.class);
                 // Sending songIndex to PlayerActivity
@@ -73,28 +64,5 @@ public class PlayListActivity extends ListActivity {
             }
         });
     }
-    @SuppressLint("NewApi")
-    public void sendNotification(int index) {
-        startService();
-//        Notification channel = new Notification.Builder(getApplicationContext(), CHANNEL_ID_1)
-//                .setSmallIcon(R.drawable.ic_music)
-//                .setContentTitle(songsList.get(index).get("songTitle"))
-//                .addAction(R.drawable.ic_skip_previous, "prev", null)
-//                .addAction(R.drawable.ic_pause, "pause", null)
-//                .addAction(R.drawable.ic_skip_next, "next", null)
-//                .setStyle(new Notification.MediaStyle()
-//                        .setShowActionsInCompactView(0,1,2))
-//                .build();
-//        notificationManagerCompat.notify(1, channel);
-    }
 
-    public void startService(){
-        Intent serviceIntent = new Intent(this, MusicService.class);
-        serviceIntent.putExtra("songIndex", String.valueOf(songIndex));
-        ContextCompat.startForegroundService(this, serviceIntent);
-    }
-    public void stopService(){
-        Intent serviceIntent = new Intent(this, MusicService.class);
-        stopService(serviceIntent);
-    }
 }
