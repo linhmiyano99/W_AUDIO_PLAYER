@@ -1,9 +1,8 @@
 package com.e.w_audio_player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,14 +12,23 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import androidx.core.app.NotificationManagerCompat;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.e.w_audio_player.App.CHANNEL_ID_1;
+
 public class PlayListActivity extends ListActivity {
     // Songs list
     public ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
-
+    private NotificationManagerCompat notificationManagerCompat;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playlist);
+
+        notificationManagerCompat = NotificationManagerCompat.from(this);
 
         ArrayList<HashMap<String, String>> songsListData = new ArrayList<HashMap<String, String>>();
 
@@ -53,6 +61,7 @@ public class PlayListActivity extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // getting listitem index
+                sendNotification();
                 int songIndex = position;
 
                 // Starting new intent
@@ -65,5 +74,19 @@ public class PlayListActivity extends ListActivity {
                 finish();
             }
         });
+    }
+    @SuppressLint("NewApi")
+    public void sendNotification() {
+        Notification channel = new Notification.Builder(getApplicationContext(), CHANNEL_ID_1)
+                .setSmallIcon(R.drawable.ic_music)
+                .setContentTitle("Let me love you - DJ snake")
+                .setContentText("Song by justin beaber")
+                .addAction(R.drawable.ic_skip_previous, "prev", null)
+                .addAction(R.drawable.ic_pause, "pause", null)
+                .addAction(R.drawable.ic_skip_next, "next", null)
+                .setStyle(new Notification.MediaStyle()
+                        .setShowActionsInCompactView(0,1,2))
+                .build();
+        notificationManagerCompat.notify(1, channel);
     }
 }

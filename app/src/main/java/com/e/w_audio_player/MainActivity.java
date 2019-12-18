@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
 
         // Load toàn bộ bài hát lên
         songsList = new ArrayList<HashMap<String, String>>();
-        songsList = songManager.getPlayList();
+
 
     }
 
@@ -136,6 +136,9 @@ public class MainActivity extends AppCompatActivity
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && arePermisionDenied()){
             requestPermissions(PERMISIONS, REQUEST_PERMISIONS);
         }
+
+        songsList = songManager.getPlayList();
+
         btnPlaylist.setOnClickListener(new View.OnClickListener() {
 
             @Override
